@@ -1,11 +1,14 @@
-import HeadlessTippy from '@tippyjs/react/headless';
+import { useEffect, useState, useRef } from 'react';
 import { Wrapper as PopperWrapper } from '~/components/Popper';
-import AccountItem from '~/components/AccountItem';
+import HeadlessTippy from '@tippyjs/react/headless';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircleXmark, faSpinner } from '@fortawesome/free-solid-svg-icons';
+
+import * as searchServices from '~/apiServices/searchServices';
 import classNames from 'classnames/bind';
 import styles from './Search.module.scss';
-import { useEffect, useState, useRef } from 'react';
+import { useDebounce } from '~/hooks';
+import AccountItem from '~/components/AccountItem';
 import { SearchIcon } from '~/components/Icons';
 
 const cx = classNames.bind(styles);
@@ -16,31 +19,39 @@ function Search() {
   const [showResult, setShowResult] = useState(true);
   const [loading, setLoading] = useState(false);
 
+  const debounced = useDebounce(searchValue, 600);
   const inputRef = useRef();
 
   useEffect(() => {
-    if (!searchValue.trim()) {
+    if (!debounced.trim()) {
       setSearchResult([]);
       return;
     }
 
     setLoading(true);
 
-    fetch(`https://tiktok.fullstack.edu.vn/api/users/search?q=${encodeURIComponent(searchValue)}&type=less`)
-      .then((res) => res.json())
-      .then((res) => {
-        setSearchResult(res.data);
-        setLoading(false);
-      })
-      .catch(() => {
-        setLoading(false);
-      });
-  }, [searchValue]);
+    const fetchApi = async () => {
+      setLoading(true);
+
+      const result = await searchServices.search(debounced);
+      setSearchResult(result);
+
+      setLoading(false);
+    };
+    fetchApi();
+  }, [debounced]);
 
   const handleClear = () => {
     setSearchValue('');
     setSearchResult([]);
     inputRef.current.focus();
+  };
+
+  const handleChange = (e) => {
+    const searchValue = e.target.value;
+    if (!searchValue.startsWith(' ')) {
+      setSearchValue(searchValue);
+    }
   };
 
   const handleHideResult = () => {
@@ -69,7 +80,7 @@ function Search() {
           value={searchValue}
           placeholder="Search accounts and videos"
           spellCheck={false}
-          onChange={(e) => setSearchValue(e.target.value)}
+          onChange={handleChange}
           onFocus={() => setShowResult(true)}
         />
         {/* Clear icon btn */}
@@ -80,7 +91,7 @@ function Search() {
         )}
         {/* search icon btn */}
         {loading && <FontAwesomeIcon className={cx('loading')} icon={faSpinner} />}
-        <button className={cx('search-btn')}>
+        <button className={cx('search-btn')} onMouseDown={(e) => e.preventDefault()}>
           <SearchIcon />
         </button>
       </div>

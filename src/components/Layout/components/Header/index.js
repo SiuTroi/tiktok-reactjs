@@ -12,6 +12,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import Tippy from '@tippyjs/react';
 import 'tippy.js/dist/tippy.css';
+import { Link } from 'react-router-dom';
 
 import Button from '~/components/Button';
 import styles from './Header.module.scss';
@@ -20,6 +21,7 @@ import Menu from '~/components/Popper/Menu';
 import { InboxIcon, MessageIcon, UploadIcon } from '~/components/Icons';
 import Image from '~/components/Image';
 import Search from '../Search';
+import routesConfig from '~/config/routes';
 const cx = classNames.bind(styles);
 const MENU_ITEMS = [
   {
@@ -94,7 +96,9 @@ function Header() {
     <header className={cx('wrapper')}>
       <div className={cx('inner')}>
         {/* Logo */}
-        <img src={images.logo} alt="tiktok logo" />
+        <Link to={routesConfig.home} className={cx('logo-link')}>
+          <img src={images.logo} alt="tiktok logo" />
+        </Link>
         {/* Search */}
         <Search />
         {/* Action */}
@@ -131,7 +135,6 @@ function Header() {
                 className={cx('user-avatar')}
                 src="https://scontent.fdad3-1.fna.fbcdn.net/v/t39.30808-1/326347525_572863108029293_5025819455142916048_n.jpg?stp=dst-jpg_p200x200&_nc_cat=108&ccb=1-7&_nc_sid=7206a8&_nc_ohc=AgllMtbLFlMAX_A2K4y&_nc_ht=scontent.fdad3-1.fna&oh=00_AfCpUCQkWdkQblYzs1g18IVB8NwIanGsDrEsbad7qi5CrA&oe=63DD2646"
                 alt="Siu troi"
-                // fallback="https://fullstack.edu.vn/static/media/f8-icon.18cd71cfcfa33566a22b.png"
               />
             ) : (
               <button className={cx('more-btn')}>
