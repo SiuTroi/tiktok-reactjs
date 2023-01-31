@@ -25,6 +25,8 @@ import styles from './Header.module.scss';
 import images from '~/assets/images';
 import AccountItem from '~/components/AccountItem';
 import Menu from '~/components/Popper/Menu';
+import { InboxIcon, SendIcon } from '~/components/Icons';
+import Image from '~/components/Image';
 
 const cx = classNames.bind(styles);
 const MENU_ITEMS = [
@@ -147,6 +149,16 @@ function Header() {
                   <FontAwesomeIcon icon={faCloudUpload} />
                 </button>
               </Tippy>
+              <Tippy delay={[0, 100]} content="Send" placement="bottom">
+                <button className={cx('action-btn')}>
+                  <SendIcon />
+                </button>
+              </Tippy>
+              <Tippy delay={[0, 100]} content="Inbox" placement="bottom">
+                <button className={cx('action-btn')}>
+                  <InboxIcon />
+                </button>
+              </Tippy>
             </>
           ) : (
             <>
@@ -157,10 +169,11 @@ function Header() {
 
           <Menu items={currentUser ? userMenu : MENU_ITEMS} onChange={handleMenuChange}>
             {currentUser ? (
-              <img
+              <Image
                 className={cx('user-avatar')}
                 src="https://scontent.fdad3-1.fna.fbcdn.net/v/t39.30808-1/326347525_572863108029293_5025819455142916048_n.jpg?stp=dst-jpg_p200x200&_nc_cat=108&ccb=1-7&_nc_sid=7206a8&_nc_ohc=AgllMtbLFlMAX_A2K4y&_nc_ht=scontent.fdad3-1.fna&oh=00_AfCpUCQkWdkQblYzs1g18IVB8NwIanGsDrEsbad7qi5CrA&oe=63DD2646"
                 alt="Siu troi"
+                // fallback="https://fullstack.edu.vn/static/media/f8-icon.18cd71cfcfa33566a22b.png"
               />
             ) : (
               <button className={cx('more-btn')}>
