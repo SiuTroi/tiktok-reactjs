@@ -4,7 +4,7 @@ import HeadlessTippy from '@tippyjs/react/headless';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircleXmark, faSpinner } from '@fortawesome/free-solid-svg-icons';
 
-import * as searchServices from '~/apiServices/searchServices';
+import * as searchServices from '~/services/searchService';
 import classNames from 'classnames/bind';
 import styles from './Search.module.scss';
 import { useDebounce } from '~/hooks';
